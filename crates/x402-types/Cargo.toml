@@ -1,0 +1,17 @@
+[package]
+name = "x402-types"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+description = "Serde types for the x402 agentic-payments protocol and its Bazaar discovery extension. Network-neutral; Nockchain-specific payload variants gated behind a `nockchain` feature."
+
+[features]
+default = ["nockchain"]
+nockchain = []
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }

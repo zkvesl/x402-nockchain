@@ -1,0 +1,21 @@
+[package]
+name = "x402-nockchain-facilitator"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+description = "Reference Nockchain x402 facilitator: axum service implementing /verify, /settle, and the upstream-canonical /discovery/resources API. SQLite catalog. SIWN auth middleware."
+
+[dependencies]
+x402-types = { workspace = true }
+x402-nockchain-crypto = { workspace = true }
+anyhow = { workspace = true }
+axum = { workspace = true }
+chrono = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }

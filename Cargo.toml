@@ -1,0 +1,42 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/x402-types",
+    "crates/x402-nockchain-crypto",
+    "crates/x402-advertiser",
+    "crates/x402-client",
+    "crates/x402-nockchain-facilitator",
+    "crates/x402-mcp",
+    "examples/e2e_demo",
+]
+
+[workspace.package]
+version = "0.0.1"
+edition = "2021"
+rust-version = "1.85"
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/zkvesl/x402-nockchain"
+publish = false
+
+[workspace.dependencies]
+# Network-neutral protocol crates (planned for eventual crates.io publish).
+x402-types = { path = "crates/x402-types", version = "0.0.1" }
+x402-advertiser = { path = "crates/x402-advertiser", version = "0.0.1" }
+x402-client = { path = "crates/x402-client", version = "0.0.1" }
+x402-mcp = { path = "crates/x402-mcp", version = "0.0.1" }
+
+# Nockchain-bound crates.
+x402-nockchain-crypto = { path = "crates/x402-nockchain-crypto", version = "0.0.1" }
+x402-nockchain-facilitator = { path = "crates/x402-nockchain-facilitator", version = "0.0.1" }
+
+# Shared third-party deps.
+anyhow = "1"
+async-trait = "0.1"
+axum = "0.7"
+chrono = { version = "0.4", features = ["serde"] }
+reqwest = { version = "0.12", features = ["json"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "1"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "signal"] }
+tracing = "0.1"

@@ -1,0 +1,14 @@
+[package]
+name = "x402-advertiser"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+description = "Server-side helpers for x402's Bazaar discovery extension: builders that produce `bazaar` extension blocks for attachment to 402 responses."
+
+[dependencies]
+x402-types = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
