@@ -36,14 +36,31 @@ These remain explicit future options, to be revisited after the workspace's own 
 - **Publish a `x402-nockchain-signer-for-x402-kit` adapter crate.** Would let `x402-kit`'s reqwest-middleware buyers pay for Nockchain-served resources with a one-line dependency addition on their side.
 - **Cross-reference the Bazaar extension shape.** Both this workspace and `x402-kit::x402-extensions` implement the Bazaar discovery extension. If the wire formats diverge non-trivially, we converge (we are spec-snapshot-anchored and will propose upstream where applicable).
 
+## Nockchain-specific ecosystem — `nockbox/iris-rs`
+
+Separately from the network-agnostic Rust x402 ecosystem above, the Nockchain-specific Rust ecosystem contains [`nockbox/iris-rs`](https://github.com/nockbox/iris-rs) — a set of cryptographic and wallet primitives for Nockchain (MIT licensed, Rust 1.91+, `no_std` where possible, with WASM bindings). The relevant crates:
+
+| iris-rs crate | Scope | Possible use here |
+|---------------|-------|-------------------|
+| `iris-crypto` | Independent Rust port of Cheetah curve arithmetic + Schnorr signatures + SLIP-10 key derivation. `no_std`-compatible, published as `0.2.0-alpha.*`. | Alternative signing backend for `x402-nockchain-crypto`, selectable via a Cargo feature flag. Useful where `nockchain-math` (per ADR-0004) cannot compile — notably WASM targets consuming `x402-client` for browser/extension use. |
+| `iris-grpc-proto` | Nockchain gRPC v1 + v2 protobuf definitions plus Envoy gRPC-web proxy configuration. | Candidate git dependency for `x402-nockchain-facilitator`'s chain-submission path. Preferred over hand-rolling protobuf definitions if it covers the `/settle` transaction-submission surface. |
+| `iris-nockchain-types` | Core Nockchain types in Rust. | Companion to `iris-grpc-proto` if adopted. |
+| `iris-ztd`, `iris-ztd-derive`, `iris-wasm` | Noun primitives, derive macros, WASM glue. | Not currently in scope. |
+
+**Posture.** Where `nockbox/iris-rs` has shipped functionality this workspace would otherwise build from scratch, we take it as a git dependency. Its MIT license makes this friction-free and requires no coordination with the `nockbox` maintainers. There is no partnership, joint governance, or reciprocal obligation implied — iris-rs is publicly available, actively maintained, and technically competent; we consume what fits and contribute back only if a specific reason arises.
+
+**Ambient design constraint.** Because `iris` is the only known third-party Nockchain wallet (browser extension at `nockbox/iris`), users of that wallet are a meaningful design audience for the client-side SDK in this workspace. The `x402-client::Signer` trait is intentionally thin so that `iris_crypto::PrivateKey` (or any other Nockchain signing key source) can implement it in minimal glue code. This workspace may ship a small companion crate — provisionally `x402-client-iris` — that provides this adapter out of the box so no end-user or downstream library has to write it.
+
 ## Consequences
 
 **Benefits.**
 - Independence now preserves the option to interop later without lock-in.
 - Spec-snapshot anchoring is the right stance for a first-mover implementation — correctness against the chain specification matters more than ecosystem coupling.
 - The facilitator niche is uncontested in Rust today. This workspace can take that slot cleanly.
+- Reusing `nockbox/iris-rs` for proto definitions and (conditionally) WASM-compatible crypto reduces build scope without creating organizational coupling.
 
 **Costs.**
 - Duplication of effort: some data types overlap with `x402-core::transport`. Acceptable because the spec-snapshot source of truth is different from their source of truth.
 - Adopters who already use `x402-kit` for EVM/SVM need a small adapter to consume our facilitator. The `Signer` trait makes this cheap but non-zero.
+- Taking git dependencies on `nockbox/iris-rs` crates couples this workspace's release cadence to `iris-rs`'s pre-1.0 pace. Mitigated by pinning to specific SHAs rather than `master`.
 - The Rust x402 ecosystem will need deliberate coordination as it grows. Future ADRs will record interop decisions individually rather than try to anticipate them all now.

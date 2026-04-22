@@ -16,3 +16,6 @@ Thumbs.db
 # Local environment overrides
 .env
 .envrc.local
+
+#Claude
+CLAUDE.md
