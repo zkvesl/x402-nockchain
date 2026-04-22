@@ -131,20 +131,18 @@ async fn main() -> Result<()> {
     println!("[demo] stub facilitator listening on {}", base);
 
     let mcp_ext = x402_advertiser::declare_mcp(
-        "verify_intent_settlement",
-        Some("Verify the proof attached to a Vesl intent settlement.".into()),
+        "echo",
+        Some("Echo the input string back as output. Demo tool.".into()),
         json!({
             "type": "object",
             "properties": {
-                "intentId": { "type": "string", "description": "Hex-encoded intent hash" },
-                "proof":    { "type": "string", "description": "Base64 STARK proof bytes" }
+                "message": { "type": "string", "description": "Text to echo back" }
             },
-            "required": ["intentId", "proof"]
+            "required": ["message"]
         }),
         Some(McpTransport::StreamableHttp),
         Some(json!({
-            "intentId": "0xfeedface...",
-            "proof": "base64..."
+            "message": "hello, nockchain"
         })),
         None,
     );
@@ -158,7 +156,7 @@ async fn main() -> Result<()> {
     let catalog_resp = http
         .post(format!("{}/catalog", base))
         .json(&json!({
-            "resource_url": "https://verifier.vesl.cloud/mcp/verify_intent_settlement",
+            "resource_url": "https://example.test/mcp/echo",
             "extension": mcp_ext,
         }))
         .send()
@@ -185,9 +183,7 @@ async fn main() -> Result<()> {
     assert_eq!(result.items.len(), 1, "expected 1 catalogued resource");
     assert_eq!(result.pagination.total, 1);
     assert_eq!(result.items[0].kind, "mcp");
-    assert!(result.items[0]
-        .resource
-        .ends_with("/verify_intent_settlement"));
+    assert!(result.items[0].resource.ends_with("/mcp/echo"));
 
     println!("[demo] OK — round trip succeeded");
     Ok(())

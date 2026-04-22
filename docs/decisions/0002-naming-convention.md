@@ -9,10 +9,10 @@ Accepted — 2026-04-22.
 The workspace (per ADR-0001) contains both network-neutral protocol code and Nockchain-specific code. A naming scheme needed to communicate which category each crate falls into — both to future adopters and to any maintainer considering an EVM/SVM adapter in the same workspace.
 
 Candidates considered:
-1. `vesl-x402-*` across the board. Binds every crate to the vesl brand.
-2. `nockchain-x402-*` across the board. Stakes a bigger ecosystem claim but misrepresents the four neutral crates.
+1. Operator-prefixed across the board (e.g., `<operator>-x402-*`). Binds every crate to one operator's brand and misrepresents crates that are actually network-neutral protocol code.
+2. `nockchain-x402-*` across the board. Stakes a broad ecosystem claim but misrepresents the four neutral crates, which have no Nockchain-specific content.
 3. **Protocol-first:** bare `x402-*` for neutral crates, `x402-nockchain-*` for chain-bound.
-4. `x402` alone (as the repo root) with all crates inside it.
+4. `x402` alone (as the repo root) with all crates inside it. Rejected because crate names in a Rust workspace are the user-visible import path; keeping them crate-level preserves the option of splitting individual crates into their own repos.
 
 ## Decision
 
@@ -31,4 +31,4 @@ Use the **protocol-first** convention:
 
 **Costs.**
 - The repo name `x402-nockchain` doesn't capture the four neutral crates' scope, creating a minor mismatch between repo name and contents. We accept this because the repo is Nockchain-focused in operational intent (the facilitator we run) even if the SDK crates are neutral.
-- If we later fork a neutral crate off to its own repo (e.g., `github.com/zkvesl/x402-types`), we would need a namespace migration in Cargo.toml consumers — deferred to a future ADR when the question actually arises.
+- If we later fork a neutral crate off to its own repo, we would need a namespace migration in Cargo.toml consumers — deferred to a future ADR when the question actually arises.

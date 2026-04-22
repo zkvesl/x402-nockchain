@@ -18,10 +18,9 @@ use x402_types::{DiscoveryResourcesResponse, ListDiscoveryResourcesParams};
 /// Trait that produces a payment-authorization signature over a canonical
 /// auth-message byte string. Network adapters implement this.
 ///
-/// M3 scope (per `vesl-agent/docs/plans/phase-3-real-signing-siwn.md`) fleshes
-/// out the return type to carry structured signature material
-/// (`SchnorrSignatureJson` from [`x402_types::payment`]) rather than raw bytes.
-/// At M0 this is a minimal surface kept trivial on purpose.
+/// The current surface returns raw bytes; a future revision is expected to
+/// return structured signature material (`SchnorrSignatureJson` from
+/// [`x402_types::payment`]) once the payment types crate is fleshed out.
 #[async_trait]
 pub trait Signer: Send + Sync {
     /// Sign the canonical authorization-message bytes. The caller is
@@ -36,10 +35,10 @@ pub trait Signer: Send + Sync {
 
 /// Typed client for the upstream-canonical `/discovery/resources` API.
 ///
-/// Auth is intentionally pluggable but not yet wired — per
-/// `BAZAAR_UPSTREAM_NOTES.md §3` the upstream `createAuthHeaders("discovery")`
-/// hook is implementation-defined. On Nockchain this will be SIWN (wired in
-/// M3 per `vesl-agent/docs/plans/phase-3-real-signing-siwn.md`).
+/// Auth is intentionally pluggable but not yet wired — the upstream
+/// `createAuthHeaders("discovery")` hook is implementation-defined. On
+/// Nockchain this will be SIWN (see `docs/specs-snapshot/11-extensions.md
+/// §11.2`).
 pub struct BazaarClient {
     base_url: String,
     http: reqwest::Client,
