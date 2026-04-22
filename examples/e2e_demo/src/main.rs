@@ -83,7 +83,7 @@ async fn list_resources(
     let mut filtered: Vec<DiscoveryResource> = state
         .resources
         .iter()
-        .filter(|r| params.kind.as_deref().map_or(true, |k| r.kind == k))
+        .filter(|r| params.kind.as_deref().is_none_or(|k| r.kind == k))
         .cloned()
         .collect();
 
