@@ -1,8 +1,8 @@
 //! Bazaar discovery-extension types.
 //!
 //! Mirrors the TS/Python/Go reference implementations from
-//! `coinbase/x402:specs/extensions/bazaar.md`. At M0, `accepts` is modeled as
-//! `Vec<serde_json::Value>` — a known shortcut until M1 replaces it with a
+//! `coinbase/x402:specs/extensions/bazaar.md`. At Phase 0, `accepts` is modeled as
+//! `Vec<serde_json::Value>` — a known shortcut until Phase 1 replaces it with a
 //! typed `Vec<PaymentRequirements>` from [`crate::payment`].
 
 use serde::{Deserialize, Serialize};
@@ -140,8 +140,8 @@ pub struct DiscoveryResource {
     pub kind: String,
     #[serde(rename = "x402Version")]
     pub x402_version: u32,
-    /// `PaymentRequirements[]` — `Vec<Value>` at M0, upgraded to
-    /// `Vec<PaymentRequirements>` at M1 alongside [`crate::payment`].
+    /// `PaymentRequirements[]` — `Vec<Value>` at Phase 0, upgraded to
+    /// `Vec<PaymentRequirements>` at Phase 1 alongside [`crate::payment`].
     pub accepts: Vec<Value>,
     #[serde(rename = "lastUpdated")]
     pub last_updated: String,
