@@ -6,6 +6,7 @@ members = [
     "crates/x402-advertiser",
     "crates/x402-client",
     "crates/x402-nockchain-facilitator",
+    "crates/x402-nockchain-wallet-client",
     "crates/x402-mcp",
     "examples/e2e_demo",
 ]
@@ -28,12 +29,47 @@ x402-mcp = { path = "crates/x402-mcp", version = "0.0.1" }
 # Nockchain-bound crates.
 x402-nockchain-crypto = { path = "crates/x402-nockchain-crypto", version = "0.0.1" }
 x402-nockchain-facilitator = { path = "crates/x402-nockchain-facilitator", version = "0.0.1" }
+x402-nockchain-wallet-client = { path = "crates/x402-nockchain-wallet-client", version = "0.0.1" }
+
+# Canonical Schnorr-over-Cheetah signing + Tip5 domain separators + SIWN.
+# Lifted out of `x402-nockchain-crypto/src/{canonical,schnorr,replay_cache,siwn,math}.rs`
+# in Phase 0 W1-3 (per `vesl-labs/docs/plans/shared-infrastructure/10-PHASE-0-NOW.md`).
+# Path dep during local development; switch to `git = "...", tag = "v0.1.0"`
+# after vesl-wallet v0.1.0 ships (see CHANGELOG.md "Pending" section).
+vesl-signing = { path = "../vesl-wallet/crates/vesl-signing", default-features = false, features = ["json", "siwn"] }
+
+# Canonical Nockchain gRPC client (vesl-core monorepo). Path dep is intentional —
+# vesl-core is the canonical home for the shared client + it pins the same
+# nightly-2025-11-26 toolchain as the rest of the Nockchain ecosystem.
+nockchain-client-rs = { path = "../vesl-core/crates/nockchain-client-rs" }
+nockchain-types = { path = "../nockchain/crates/nockchain-types" }
+
+# Vesl SDK + raw Nockchain primitives — pulled in for the wallet-client's
+# embedded NockApp recipe (kernel pokes + Schnorr sign over Cheetah). Path
+# deps intentional, same toolchain pin.
+vesl-core = { path = "../vesl-core/crates/vesl-core" }
+nockapp = { path = "../nockchain/crates/nockapp", default-features = false }
+nockchain-math = { path = "../nockchain/crates/nockchain-math" }
+nockvm = { path = "../nockchain/crates/nockvm/rust/nockvm" }
+nockvm_macros = { path = "../nockchain/crates/nockvm/rust/nockvm_macros" }
+noun-serde = { path = "../nockchain/crates/noun-serde" }
+
+# Note: the path-2B matrix loads kernel JAM bytes at runtime from
+# `X402_KERNEL_JAM` (vesl-core's protocol kernel — `vesl.jam`) rather
+# than via a Cargo dep. Phase 5B's first matrix run surfaced that the
+# open-wallet kernel (`kernels-open-wallet::KERNEL`, i.e. `wal.jam`)
+# does not expose `%sig-hash`/`%tx-id` at its top-level poke arm; only
+# the vesl-core protocol kernel does. The runbook in
+# `vesl-agent/harness/fakenet/` is authoritative on which JAM to point
+# the env var at.
 
 # Shared third-party deps.
 anyhow = "1"
 async-trait = "0.1"
 axum = "0.7"
+base64 = "0.22"
 chrono = { version = "0.4", features = ["serde"] }
+rand = "0.8"
 reqwest = { version = "0.12", features = ["json"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

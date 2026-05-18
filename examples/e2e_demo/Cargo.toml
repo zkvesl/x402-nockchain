@@ -12,14 +12,47 @@ description = "End-to-end demo: stub x402 facilitator + Bazaar advertiser + Baza
 name = "e2e_demo"
 path = "src/main.rs"
 
+[[bin]]
+name = "demo_full"
+path = "src/bin/demo_full.rs"
+
 [dependencies]
 x402-types = { workspace = true }
 x402-advertiser = { workspace = true }
 x402-client = { workspace = true }
+x402-mcp = { workspace = true }
+x402-nockchain-crypto = { workspace = true }
+x402-nockchain-facilitator = { workspace = true }
 anyhow = { workspace = true }
 axum = { workspace = true }
+base64 = { workspace = true }
 chrono = { workspace = true }
+ibig = "0.3"
+nockchain-client-rs = { workspace = true }
 reqwest = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 tokio = { workspace = true }
+# Path-2B demo branch — booting a real wallet kernel in the demo
+# binary requires both the wallet-client crate and the kernel JAM
+# bytes. Pulled in only under the `path2b` feature so a vanilla
+# `cargo build -p e2e_demo` stays slim.
+x402-nockchain-wallet-client = { workspace = true, optional = true }
+nockapp = { workspace = true, optional = true }
+nockchain-math = { workspace = true, optional = true }
+vesl-core = { workspace = true, optional = true }
+
+[features]
+default = []
+# Compile the path-2B branch of `demo_full`. Off by default so the
+# bare demo (`bash examples/demo.sh`) doesn't pull the wallet kernel.
+# Activated by `bash examples/demo.sh --grpc --path2b`. The path-2B
+# branch reads `X402_KERNEL_JAM` at runtime to locate the JAM bytes
+# of a kernel exposing %sig-hash + %tx-id pokes (e.g. vesl.jam from
+# hull-llm/assets/).
+path2b = [
+    "dep:x402-nockchain-wallet-client",
+    "dep:nockapp",
+    "dep:nockchain-math",
+    "dep:vesl-core",
+]

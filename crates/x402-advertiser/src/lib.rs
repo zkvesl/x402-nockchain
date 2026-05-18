@@ -6,6 +6,10 @@
 //!
 //! Reference: `coinbase/x402:specs/extensions/bazaar.md`.
 
+#[cfg(doctest)]
+#[doc = include_str!("../README.md")]
+struct _ReadmeDoctest;
+
 use serde_json::Value;
 use std::collections::BTreeMap;
 use x402_types::{

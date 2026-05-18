@@ -1,0 +1,56 @@
+[package]
+name = "x402-nockchain-wallet-client"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+description = "WalletBackend implementation for the nockchain-wallet kernel: embeds a NockApp loaded with the wallet kernel, drives %sig-hash + %tx-id pokes to assemble a signed RawTx, and returns both the §5.4.1 envelope signature and the on-chain RawTx surrogate."
+
+[dependencies]
+x402-types = { workspace = true }
+x402-client = { workspace = true }
+x402-nockchain-crypto = { workspace = true }
+anyhow = { workspace = true }
+# Optional, feature-gated. Pulled in by `_wallet_kernel_tests` for the
+# `tests/fakenet_path2b.rs` matrix. `tempfile` gives each test an
+# isolated kernel state dir. Kernel JAM bytes are loaded at runtime
+# from `X402_KERNEL_JAM` rather than via a Cargo dep — Phase 5B's
+# matrix execution surfaced that the open-wallet kernel (`wal.jam`)
+# does not expose `%sig-hash`/`%tx-id` at the top-level poke arm
+# (those live in the vesl-core protocol kernel `vesl.jam`). Loading
+# the JAM by path keeps the public crate kernel-agnostic; the
+# operator runbook in `vesl-agent/harness/fakenet/runbook.md` is
+# authoritative on which JAM to point the env var at.
+tempfile = { version = "3", optional = true }
+async-trait = { workspace = true }
+base64 = { workspace = true }
+bs58 = "0.5"
+bytes = "1"
+ibig = "0.3"
+nockapp = { workspace = true }
+nockchain-client-rs = { workspace = true }
+nockchain-math = { workspace = true }
+nockchain-types = { workspace = true }
+nockvm = { workspace = true }
+nockvm_macros = { workspace = true }
+noun-serde = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+vesl-core = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros"] }
+
+[features]
+# Enable the kernel-bound fakenet matrix in `tests/fakenet_path2b.rs`.
+# Off by default — operator-only. Pulls `kernels-open-wallet` for the
+# `wal.jam` bytes; the tests are also `#[ignore]`-d so a feature-on
+# `cargo test` without `--ignored` still skips them. See
+# `vesl-agent/docs/plans/phase-5b-fakenet-path2b-validation.md` for
+# the matrix and its sequencing.
+_wallet_kernel_tests = ["dep:tempfile"]

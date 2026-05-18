@@ -1,0 +1,46 @@
+{
+  "signature": {
+    "pubkey": "3WhcwvTgGQDxohSWEb9gFFq7ZpExoAfwDR1hKrJHruc72eJohvmjaqPtBCN3JQW4m8n3YGB8N1apyU2cAQ3LNvbWVJR3a4mA8JdAdUJDjbRGPCVerGWseJK3iGAnhrsLsKrj",
+    "schnorr": {
+      "chal": [
+        "16735171",
+        "109787565",
+        "2079202866",
+        "164605801",
+        "970093249",
+        "3281075697",
+        "1984150945",
+        "1084357821"
+      ],
+      "sig": [
+        "3526442431",
+        "2632432912",
+        "2333004699",
+        "1811625325",
+        "2501931221",
+        "1889567717",
+        "3146220878",
+        "500658722"
+      ]
+    }
+  },
+  "authorization": {
+    "from": "7cg1kteLMk41Z2fbdgSafKmAi8EarqTm9wQ7iqcTRhUdf7Gngok8Akb",
+    "to": "HLdRP8Q5aDnQrJeR8uNCPrzgtGWX1iMGYL7YNUaKLduRN",
+    "value": "65536",
+    "fee": "10",
+    "nonce": "5R66wheQjmLGbNXCv3EW9EFLqEPBHxYCgPsr4syCeoWLdaX",
+    "validAfter": 1000000,
+    "validBefore": 1000060,
+    "notes": [
+      {
+        "name": {
+          "first": "2V9arU36gvtaofWmNowewoj9u7gbNA2qsJZEQ3WPky5mQ",
+          "last": "3yJAhw5CNrnB1fdWrjUSrDV8jJqQxtbqfEPSo1s7eaE3h"
+        },
+        "assets": "65536"
+      }
+    ],
+    "changeAddress": "7cg1kteLMk41Z2fbdgSafKmAi8EarqTm9wQ7iqcTRhUdf7Gngok8Akb"
+  }
+}

@@ -2,6 +2,7 @@
 **/*.rs.bk
 *.pdb
 Cargo.lock.bak
+docs
 
 # Editor/IDE state
 .idea/

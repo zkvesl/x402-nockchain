@@ -11,11 +11,28 @@ description = "Reference Nockchain x402 facilitator: axum service implementing /
 [dependencies]
 x402-types = { workspace = true }
 x402-nockchain-crypto = { workspace = true }
+x402-nockchain-wallet-client = { workspace = true }
 anyhow = { workspace = true }
+async-trait = { workspace = true }
 axum = { workspace = true }
+base64 = { workspace = true }
 chrono = { workspace = true }
+jsonschema = { version = "0.17", default-features = false, features = ["draft202012", "resolve-file"] }
+metrics = "0.23"
+metrics-exporter-prometheus = { version = "0.15", default-features = false }
+nockchain-client-rs = { workspace = true }
+nockchain-types = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
+sqlx = { version = "0.8", default-features = false, features = ["sqlite", "runtime-tokio", "macros", "migrate"] }
 thiserror = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+[dev-dependencies]
+x402-advertiser = { workspace = true }
+x402-client = { workspace = true }
+ibig = "0.3"
+reqwest = { workspace = true }
+tower = "0.5"
